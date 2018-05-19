@@ -106,7 +106,7 @@ class operate():
             self.file_ = filedialog.askopenfile()
             with self.file_ as f:
                 file_ = self.file_
-        #help(self.file_)
+        
                 text_area.delete(1.0,END)
                 text_area.insert(1.0,file_.read())
                 self.is_file_open = True
@@ -116,11 +116,9 @@ class operate():
     def run(self):
         if self.is_file_open:
             self.save()
-            directory,file_name = os.path.split(self.file_.name) 
+             
             a = Popen(["gcc",self.file_.name],stdout=PIPE)
-            #print("print baskısı: " + a.decode(" utf-8"))
-            #with open("log.txt","w") as f:
-                #f.write(a.communicate[0].decode(" utf-8"))
+            
         else:
             self.save_as()
             directory,file_name = os.path.split(self.file_.name) 
