@@ -22,19 +22,20 @@ from functools import partial
 from tkinter import *
 import os
 from tkinter import filedialog, messagebox
+from tkinter.scrolledtext import ScrolledText
+from subprocess import PIPE, Popen
 
-from subprocess import PIPE, Popen, call, check_output
-import sys
 
 
 class operate():
     def __init__(self):
-        self.is_file_open = False
-        self.is_new_file = True
+        self.open_file = ""
+        
 
     def exit_(self):
-        if self.is_file_open:
-            with open(self.file_.name, "r") as f:
+        if os.path.isfile(self.open_file):
+            
+            with open(self.open_file, "r") as f:
                 file_content = f.read()
             print(text_area.get(1.0, END))
             if file_content == text_area.get(1.0, END):
@@ -42,7 +43,7 @@ class operate():
             else:
                 response = messagebox.askquestion("uyari",
                                                   "dosyanizda birtakim degisiklikler yapıldı.Kaydetmek istiyor musunuz?")
-                print(response)
+               
                 if response == "yes":
                     self.save()
                     pcr.destroy()
@@ -52,70 +53,105 @@ class operate():
             pcr.destroy()
 
     def new_file(self):
-        if self.is_file_open:
-            with open(self.file_.name, "r") as f:
+        if os.path.isfile(self.open_file):
+            with open(self.open_file, "r") as f:
                 file_content = f.read()
-            print(text_area.get(1.0, END))
+           
             if file_content == text_area.get(1.0, END):
                 text_area.delete(1.0, END)
-                self.file_ = ""
+                self.open_file = ""
+                pcr.title = "untitled.c"
             else:
                 response = messagebox.askquestion("uyari",
                                                   "Acılmıs bir dosyaniz var ve dosyanizda birtakim degisiklikler yapıldı.Kaydetmek istiyor musunuz?")
-                print(response)
+                
                 if response == "yes":
                     self.save()
                     text_area.delete(1.0, END)
-                    self.file_ = ""
+                    self.open_file = ""
+                    pcr.title = "untitled.c"
                 else:
                     text_area.delete(1.0, END)
-                    self.file_ = ""
+                    self.open_file = ""
+                    pcr.title = "untitled.c"
         else:
             text_area.delete(1.0, END)
-            self.file_ = ""
+            self.open_file = ""
+            pcr.title = "untitled.c"
 
     def save_as(self):
         try:
             file_ = filedialog.asksaveasfile()
-            with file_ as f:
-                f.write(text_area.get(1.0, END))
-                self.is_file_open = True
-                self.file_ = file_
+            if os.path.isfile(file_.name):
+                with file_ as f:
+                    f.write(text_area.get(1.0, END))
+                
+                    self.open_file = file_.name
+                    pcr.title = os.path.split(self.open_file)[1]
         except:
             pass
 
     def save(self):
         try:
-            with open(self.file_.name, "w") as f:
+            with open(self.open_file, "w") as f:
                 f.write(text_area.get(1.0, END))
         except:
-            if self.is_new_file:
-                self.save_as()
-            else:
-                messagebox.showwarning("uyari", "herhangi bir dosya acilmamis.")
+            
+            self.save_as()
+            
 
     def open(self):
-        try:
-            self.file_ = filedialog.askopenfile()
-            with self.file_ as f:
-                file_ = self.file_
-
-                text_area.delete(1.0, END)
-                text_area.insert(1.0, file_.read())
-                self.is_file_open = True
-        except:
-            pass
-
+        if not os.path.isfile(self.open_file):
+            try:
+                file_ = filedialog.askopenfile()
+                
+                with file_ as f:
+                    self.open_file = file_.name
+                    pcr.title = os.path.split(self.open_file)[1]
+                    text_area.delete(1.0, END)
+                    text_area.insert(1.0, file_.read())
+                
+            except:
+                pass
+        else:
+            response = messagebox.askquestion("uyari",
+                                                  "Acılmıs bir dosyaniz var ve dosyanizda birtakim degisiklikler yapıldı.Kaydetmek istiyor musunuz?")
+            if response == "yes":
+                self.save()
+                try:
+                    file_ = filedialog.askopenfile()
+                    
+                    with file_ as f:
+                        self.open_file = file_.name
+                        
+                        text_area.delete(1.0, END)
+                        text_area.insert(1.0, file_.read())
+                        pcr.title = os.path.split(self.open_file)[1]
+                except:
+                    pass
+            if response == "no":
+                try:
+                    file_ = filedialog.askopenfile()
+                    
+                    with file_ as f:
+                        self.open_file = file_.name
+                        
+                        text_area.delete(1.0, END)
+                        text_area.insert(1.0, file_.read())
+                        pcr.title = os.path.split(self.open_file)[1]
+                except:
+                    pass
     def run(self):
-        if self.is_file_open:
+        if os.path.isfile(self.open_file):
             self.save()
 
             a = Popen(["gcc", self.file_.name], stdout=PIPE)
 
         else:
             self.save_as()
-            directory, file_name = os.path.split(self.file_.name)
-            a = Popen(["gcc", self.file_.name], stdout=PIPE)
+            if os.path.isfile(self.open_file):
+                
+                a = Popen(["gcc", self.open_file], stdout=PIPE)
 
     def copy(self):
         text_area.event_generate("<<Copy>>")
@@ -130,8 +166,8 @@ class operate():
         location_window = Tk()
         self.entry1 = Entry(location_window)
         self.entry2 = Entry(location_window)
-        lab1 = Label(location_window, text="1.etiket")
-        lab2 = Label(location_window, text="2.etiket")
+        lab1 = Label(location_window, text="row")
+        lab2 = Label(location_window, text="column")
         btn = Button(location_window, text="go", command=partial(self._go_to_line, location_window))
         self.entry1.grid(row=0, column=0)
         lab1.grid(row=0, column=1)
@@ -175,12 +211,7 @@ run_menu = Menu(menu_bar)
 menu_bar.add_cascade(label="run", menu=run_menu)
 run_menu.add_command(label="run", command=opr.run)
 # --------------------------------------------------------------
-text_area = Text(pcr)
-txt = Scrollbar(text_area)
+text_area = ScrolledText(pcr)
 
-text_area.grid(sticky=N + E + S + W)
-
-pcr.grid_rowconfigure(0, weight=1)
-pcr.grid_columnconfigure(0, weight=1)
-
+text_area.pack(expand=True,fill="both")
 pcr.mainloop()
