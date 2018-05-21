@@ -5,7 +5,7 @@ Bu proje bilgisayarı programlamaya elverisli olmayan arkadaslarım icindir.Bu k
 
 •PROPERTIES
 
-It just runs in linux.It does not windows.
+It just runs in linux.It does not in windows.
 You can run this program in python3 and python2.
 
 •DEPENDENCIES
