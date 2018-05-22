@@ -1,0 +1,68 @@
+{
+    "auto" : "\033[94m",
+    "break" : "\033[94m",
+    "case" : "\033[94m",
+    "char" : "\033[94m",
+    "const" : "\033[94m",
+    "continue" : "\033[94m",
+    "default" : "\033[94m",
+    "do" : "\033[94m",
+    "else" : "\033[94m",
+    "extern" : "\033[94m",
+    "for" : "\033[94m",
+    "if" : "\033[94m",
+    "fortran" : "\033[94m",
+    "goto" : "\033[94m",
+    "inline" : "\033[94m",
+    "register" : "\033[94m",
+    "restrict" : "\033[94m",
+    "return" : "\033[94m",
+    "static" : "\033[94m",
+    "switch" : "\033[94m",
+    "while" : "\033[94m",
+
+
+    
+    
+    "double" : "\033[92m",  
+    "enum" : "\033[92m",   
+    "float"  : "\033[92m",
+    "int"  : "\033[92m",
+    "struct"  : "\033[92m",  
+    "typedef"  : "\033[92m",
+    "union"  : "\033[92m",
+    
+    
+    
+    "long"  : "\033[95m",
+    "short"  : "\033[95m",
+    "signed"  : "\033[95m",
+    "sizeof"  : "\033[95m",   
+    "unsigned"  : "\033[95m",
+    "void"  : "\033[95m",
+    "volatile"  : "\033[95m",
+    
+    "_Alignas" : "\033[93m",
+    "_Alignof" : "\033[93m",
+    "_Atomic" : "\033[93m",
+    "_Bool" : "\033[93m",
+    "_Complex" : "\033[93m",
+    "_Generic" : "\033[93m",
+    "_Imaginary" : "\033[93m",
+    "_Noreturn" : "\033[93m",
+    "_Static_assert" : "\033[93m",
+    "_Thread_local" : "\033[93m",
+    
+    "#define" : "\033[91m",
+    "#elif" : "\033[91m",
+    "#else" : "\033[91m",
+    "#endif" : "\033[91m",
+    "#error" : "\033[91m",
+    "#if" : "\033[91m",
+    "#ifdef" : "\033[91m",
+    "#ifndef" : "\033[91m",
+    "#include" : "\033[91m",
+    "#line" : "\033[91m",
+    "#pragma" : "\033[91m"
+
+}
