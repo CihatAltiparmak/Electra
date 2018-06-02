@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPlainTextEdit
+#from PyQt5.QtWidgets import QPlainTextEdit
 
 from PyQt5 import *
 
@@ -151,7 +151,7 @@ class My_Text_Area(QPlainTextEdit):
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            lineColor = QColor(Qt.yellow).lighter(160)
+            lineColor = QColor(Qt.yellow).lighter(25)
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()

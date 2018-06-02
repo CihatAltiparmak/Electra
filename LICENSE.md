@@ -1,4 +1,6 @@
-Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd
+The MIT License (MIT)
+
+Copyright (c) 2018 Cihat Altiparmak and Furkan Tokaç
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

@@ -10,16 +10,31 @@ You can run this program in python3 and python2.
 
 •DEPENDENCIES
 
- -- For c_editor.py script file --
- python3-tk package => if you want to this program in python3
-  apt install python3-tk
- python2-tk package => if you want to this script in python2
-  apt install python-tk
+ ------- For electra 0.0.1 -------
+
+**********************************************************************
+ python3-tk package => if you want to run this program in python3    *
+                                                                     * 
+  apt install python3-tk                                             *
+**********************************************************************
+ python2-tk package => if you want to run this script in python2     *
+                                                                     *
+  apt install python-tk                                              *
+**********************************************************************
+
+======================================================================
+
   
--- For c_editor_pyqt.py script file --
-
-PyQt5 package 
-
+------- For electra 0.0.2 -------
+**********************************************************************
+python3-pyqt5 package => if you want to run this program in python3  *
+                                                                     *
+apt install python3-pyqt5                                            *
+**********************************************************************
+                                                                     *
+python-pyqt5 package => if you want to run this program in python2   *
+                                                                     *
+**********************************************************************
 
 
 

@@ -17,6 +17,19 @@ Zaman oldukca gelistirilecektir.
 Gule gule kullanın:)
 """
 
+code = """
+import atexit
+
+a = "cample"  # her canlı mutlulugu belki tadabilir
+
+help()
+
+
+
+12
+
+"""
+
 import sys
 
 import os
@@ -30,9 +43,14 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPlainTextEdit, QFileDial
     QMessageBox
 
 
-from PyQt5.QtGui import QIcon ,QTextCursor
+from PyQt5.QtGui import QIcon ,QTextCursor, QFont
 
 from text_area import My_Text_Area
+
+from brusher import c_highlighter
+
+
+
 
 __author__ = "Cihat Altiparmak"
 __version__ = "0.0.2"
@@ -100,7 +118,12 @@ class Electra(QMainWindow):
         self.text_area = My_Text_Area()   #QPlainTextEdit()
         self.setCentralWidget(self.text_area)
         self.text_area.textChanged.connect(lambda: self.correct())
-
+        self.text_area.setStyleSheet("""QPlainTextEdit {background-color: #333;
+                                        color: #00FF00;
+                                        font-family: Courier;}""")
+         
+        self.highlighter = c_highlighter.C_Highlighter(self.text_area.document())
+        
     def run(self):
         if os.path.isfile(self.open_file):
             if self.is_change_file:
@@ -169,6 +192,19 @@ class Electra(QMainWindow):
             pass
 
     def open(self):
+        if self.is_change_file and os.path.isfile(self.open_file):
+            button_reply = QMessageBox.question(self, "Warning",
+                                                "You have a unsaved file. Do you want to save changes?",
+                                                QMessageBox.Cancel | QMessageBox.No | QMessageBox.Yes | QMessageBox.Cancel)
+            if button_reply == QMessageBox.Yes:
+                self.save()
+                
+            elif button_reply == QMessageBox.No:
+                pass
+            elif button_reply == QMessageBox.Cancel:
+                return
+
+        
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)", options=options)
@@ -223,9 +259,12 @@ class Electra(QMainWindow):
         w.exec_()
 
     def correct(self):
+        
         if os.path.isfile(self.open_file):
             self.is_change_file = True
             self.setWindowTitle("*" + self.open_file)
+             
+             
 
 
 if __name__ == "__main__":
@@ -234,6 +273,7 @@ if __name__ == "__main__":
     myapp = Electra()
     myapp.setWindowTitle("Electra")
     myapp.setWindowIcon(QIcon("./res/appicon.png"))
+    myapp.resize(600,600)
     myapp.show()
 
     sys.exit(app.exec_())
