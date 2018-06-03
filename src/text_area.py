@@ -1,126 +1,72 @@
-#from PyQt5.QtWidgets import QPlainTextEdit
+# from PyQt5.QtWidgets import QPlainTextEdit
 
 from PyQt5 import *
-
 from PyQt5.QtCore import Qt, QRect, QSize
-
 from PyQt5.QtWidgets import QWidget, QPlainTextEdit, QTextEdit
-
 from PyQt5.QtGui import QColor, QPainter, QTextFormat
 
+
 class QLineNumberArea(QWidget):
-
     def __init__(self, editor):
-
         super().__init__(editor)
-
         self.codeEditor = editor
 
     def sizeHint(self):
-
         return QSize(self.editor.lineNumberAreaWith(), 0)
 
     def paintEvent(self, event):
-
         self.codeEditor.lineNumberAreaPaintEvent(event)
 
 
-
-
-
-
 class My_Text_Area(QPlainTextEdit):
-
-    def __init__(self, parent = None):
-
-        super(My_Text_Area ,self).__init__(parent)
-
+    def __init__(self, parent=None):
+        super(My_Text_Area, self).__init__(parent)
         self.is_first_input = True
-
         self.lineNumberArea = QLineNumberArea(self)
-
         self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
-
         self.updateRequest.connect(self.updateLineNumberArea)
-
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
+        self.updateLineNumberAreaWidth(10)
 
-        self.updateLineNumberAreaWidth(0)
-
-    def mousePressEvent(self ,event):
-
+    def mousePressEvent(self, event):
         if self.is_first_input:
-
             self.selectAll()
-
             self.clear()
-
             self.is_first_input = False
-
         else:
-
             pass
 
         if event.button() == QtCore.Qt.LeftButton:
-
             self.startCursorPosition = event.pos()
-
-            cursor =  self.cursorForPosition(self.startCursorPosition)
-
+            cursor = self.cursorForPosition(self.startCursorPosition)
             self.startPosition = cursor.position()
 
-    
-
     def mouseMoveEvent(self, event):
-
         if event.button() == QtCore.Qt.NoButton:
-
             self.endCursorPosition = event.pos()
-
-            cursor = self.cursorForPosition(self.endCursorPosition) 
-
+            cursor = self.cursorForPosition(self.endCursorPosition)
             position = cursor.position()
-
             cursor.setPosition(self.startPosition)
-
-            cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor) 
-
+            cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor)
             self.setTextCursor(cursor)
-
 
     def mouseReleaseEvent(self, event):
-
         if event.button() == QtCore.Qt.LeftButton:
-
             self.endCursorPosition = event.pos()
-
             cursor = self.cursorForPosition(self.endCursorPosition)
-
             position = cursor.position()
-
             cursor.setPosition(self.startPosition)
-
-            cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor)      
-
+            cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor)
             self.setTextCursor(cursor)
 
-
     def _go_to_line(self, row, column, dialog):
-
-        row, column = int(row.text()) - 1 , int(column.text()) -1 
-
+        row, column = int(row.text()) - 1, int(column.text()) - 1
         cursor = self.textCursor()
-        
         cursor.movePosition(QtGui.QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
-
         cursor.movePosition(QtGui.QTextCursor.Right, QtGui.QTextCursor.MoveAnchor, row)
-
         cursor.movePosition(QtGui.QTextCursor.Down, QtGui.QTextCursor.MoveAnchor, column)
-
         self.setTextCursor(cursor)
-
         dialog.destroy()
-
 
     def lineNumberAreaWidth(self):
         digits = 1
@@ -129,7 +75,7 @@ class My_Text_Area(QPlainTextEdit):
             max_value /= 10
             digits += 1
         space = 3 + self.fontMetrics().width('9') * digits
-        return space
+        return space + 3
 
     def updateLineNumberAreaWidth(self, _):
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
@@ -175,32 +121,9 @@ class My_Text_Area(QPlainTextEdit):
             if block.isVisible() and (bottom >= event.rect().top()):
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.black)
-                painter.drawText(0, top, self.lineNumberArea.width(), height, Qt.AlignRight, number)
+                painter.drawText(0, top, self.lineNumberArea.width()-3, height, Qt.AlignRight, number)
 
             block = block.next()
             top = bottom
             bottom = top + self.blockBoundingRect(block).height()
             blockNumber += 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
