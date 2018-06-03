@@ -7,7 +7,7 @@
 #  creating_date => 19.05.2018                  #                  ####   #   #
 #  creating_time => 00.29                       #                  #  #   #   #
 #  thank_to      => BDFrostbide and furkantokac #                  #  #   #   #
-#  version       => 0.0.2                       #                  #  #   #   #
+#  version       => 1.0.0                       #                  #  #   #   #
 ################################################                   ###    ####
 """
 author's message:
@@ -16,19 +16,7 @@ BU Basit C EDITOR'u bilgisayarı programlamaya uygun olmayan herkes icindir.
 Zaman oldukca gelistirilecektir.
 Gule gule kullanın:)
 """
-
-code = """
-import atexit
-
-a = "cample"  # her canlı mutlulugu belki tadabilir
-
-help()
-
-
-
-12
-
-"""
+ 
 
 import sys
 import os
