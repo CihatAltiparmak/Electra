@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from PyQt5.QtCore import QFile, QRegExp, Qt
-from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat
+from PyQt5.QtGui import QFont, QSyntaxHighlighter, QTextCharFormat, QColor
 from syntaxer import Syntax_Patcher
 
 
@@ -10,27 +10,23 @@ class C_Highlighter(QSyntaxHighlighter):
     def __init__(self, parent=None):
 
         super(C_Highlighter, self).__init__(parent)
+        self.parent = parent
 
-        # -----------------> keyword format
-
-        keyword_format = QTextCharFormat()
-        keyword_format.setForeground(Qt.darkBlue)
-        keyword_format.setFontWeight(QFont.Bold)
         parcher = Syntax_Patcher()
-        keyword_patterns = parcher.c_parcher()["keywords"]
+        keyword_patterns = parcher.c_parcher()
 
-        self.highlight_rules = [(QRegExp(pattern), keyword_format) for pattern in keyword_patterns]
 
         # -----------------> data types format
 
-        data_types_format = QTextCharFormat()
-        data_types_format.setForeground(Qt.yellow)
-        data_types_format.setFontWeight(QFont.ExtraBold)
+        data_types_patterns = parcher.c_parcher()
 
-        data_types_patterns = parcher.c_parcher()["data_types"]
+        self.data_types_format = QTextCharFormat()
+        self.data_types_format.setForeground(self.give_color(data_types_patterns["data_types"]["color"]))    #yellow
+        self.data_types_format.setFontWeight(QFont.ExtraBold)
 
-        for pattern in data_types_patterns:
-            self.highlight_rules.append((QRegExp(pattern), data_types_format))
+        self.highlight_rules = [(QRegExp(pattern), self.data_types_format) for pattern in data_types_patterns["data_types"]["words"]]
+        #print("data_types_uzunlugu: ",len(data_types_patterns["data_types"]["words"]))
+        
 
         # -----------------> function format
 
@@ -40,10 +36,20 @@ class C_Highlighter(QSyntaxHighlighter):
 
         self.highlight_rules.append((QRegExp("\\b[A-Za-z0-9_]+(?=\\()"), func_format))
 
+        # -----------------> keyword format
+
+        self.keyword_format = QTextCharFormat()
+        self.keyword_format.setForeground(self.give_color(keyword_patterns["keywords"]["color"]))  #white
+        self.keyword_format.setFontWeight(QFont.Bold)
+        
+        for pattern in keyword_patterns["keywords"]["words"]:
+            self.highlight_rules.append((QRegExp(pattern), self.keyword_format))
+            
+
         # -----------------> single line comment format
 
         single_comment_format = QTextCharFormat()
-        single_comment_format.setForeground(Qt.green)
+        single_comment_format.setForeground(QColor(0,0,0,100))
         single_comment_format.setFontWeight(QFont.Courier)
 
         self.highlight_rules.append((QRegExp("//[^\n]*"), single_comment_format))
@@ -89,3 +95,31 @@ class C_Highlighter(QSyntaxHighlighter):
                 commentLength = endIndex - startIndex + self.commentEnd.matchedLength()
             self.setFormat(startIndex, commentLength, self.multi_comment_format)
             startIndex = self.commentStart.indexIn(text, startIndex + commentLength);
+
+
+    def give_color(self, color):
+
+        if color == "red":
+            return Qt.red 
+
+        if color == "blue":
+            return Qt.blue
+
+        if color == "green":
+            return Qt.green
+
+        if color == "yellow":
+            return Qt.yellow
+
+        if color == "white":
+            return Qt.white
+
+        if color == "magenta":
+            return Qt.magenta
+
+        if color == "cyan":
+            return Qt.cyan
+
+    def _reinit__(self):
+        self.__init__(parent = self.parent)
+

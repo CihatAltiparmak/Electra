@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# !/usr/bin/env python
 
 ################################################                   ###    ####
 #                                               #                  #  #   #   #
@@ -20,17 +19,24 @@ Gule gule kullanın:)
 
 import sys
 import os
+import json
 from subprocess import Popen
 from functools import partial
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPlainTextEdit, QFileDialog, \
     QDialog, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QAction, \
     QMessageBox
 from PyQt5.QtGui import QIcon, QTextCursor, QFont
+
 from text_area import My_Text_Area
 from brusher import c_highlighter
+from Themes import Themes
+from ColorizePopup import Colorize
+from errorPopups import FileCannotOpenErrorDialog
+from programmingChoices import Lang
 
 __author__ = "Cihat Altiparmak"
 __version__ = "0.0.2"
+
 
 
 class Electra(QMainWindow):
@@ -38,6 +44,9 @@ class Electra(QMainWindow):
         super().__init__()
         self.open_file = ""
         self.is_change_file = False
+
+        with open("settings.json") as f:
+            self.settings_data = json.loads(f.read())
 
         self.init_iu()
 
@@ -90,30 +99,63 @@ class Electra(QMainWindow):
         run_action.triggered.connect(self.run)
         run_menu.addAction(run_action)
 
+        # Settings menu
+        settings_menu = menu_bar.addMenu("Settings")
+
+        programming_lang_action = QAction("select the programming language", self)
+        programming_lang_action.triggered.connect(self.select_programming_lang)
+        settings_menu.addAction(programming_lang_action)
+
+        tab_width_action = QAction("Tab Width", self)
+        tab_width_action.triggered.connect(self.set_tab_width)
+        settings_menu.addAction(tab_width_action)
+
+        theme_action = QAction("Theme", self)
+        theme_action.triggered.connect(self.set_theme)
+        settings_menu.addAction(theme_action)
+
+        colorize_action = QAction("Keyword Colorize", self)
+        colorize_action.triggered.connect(self.set_colorize)
+        settings_menu.addAction(colorize_action)
+
         # ---> Text area
+        
         self.text_area = My_Text_Area()  # QPlainTextEdit()
         self.setCentralWidget(self.text_area)
         self.text_area.textChanged.connect(lambda: self.correct())
-        self.text_area.setStyleSheet("""QPlainTextEdit {background-color: #333;
-                                        color: #00FF00;
-                                        font-family: Courier;}""")
+        self.text_area.setStyleSheet("QPlainTextEdit {background-color: " + self.settings_data["theme"] + ";" + "color: #00FF00; font-family: Courier;}")
 
         self.highlighter = c_highlighter.C_Highlighter(self.text_area.document())
+        
+        
+        # ---> File Tree View
+        
+        # ---> Setting Layout
 
+        
     def run(self):
         if os.path.isfile(self.open_file):
             if self.is_change_file:
                 if self.question_box():
-                    Popen(["gcc", self.open_file])
+                    with open("settings.json") as f:
+                        json_data = json.loads(f.read())
+                    self.lang_running(json_data["default_programming_lang"], self.open_file)
+                    #Popen(["gcc", self.open_file])
                 else:
                     pass
             else:
-                Popen(["gcc", self.open_file])
+                with open("settings.json") as f:
+                    json_data = json.loads(f.read())
+                    self.lang_running(json_data["default_programming_lang"], self.open_file)
+                #Popen(["gcc", self.open_file])
         else:
             running_file = self.save_as()
             if bool(running_file):
                 if os.path.isfile(running_file):
-                    Popen(["gcc", running_file])
+                    with open("settings.json") as f:
+                        json_data = json.loads(f.read())
+                    self.lang_running(json_data["default_programming_lang"], running_file)
+                    #Popen(["gcc", running_file])
 
     def copy(self):
         self.text_area.copy()
@@ -183,9 +225,11 @@ class Electra(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "", "All Files (*)", options=options)
-
-        with open(file_name, "r") as f:
-            self.text_area.document().setPlainText(f.read())
+        try:
+            with open(file_name, "r") as f:
+                self.text_area.document().setPlainText(f.read())
+        except UnicodeDecodeError:
+            a = FileCannotOpenErrorDialog()
         self.open_file = file_name
         self.setWindowTitle(file_name)
 
@@ -201,6 +245,9 @@ class Electra(QMainWindow):
             return True
         if button_reply == QMessageBox.Cancel:
             return False
+
+        #if button_reply == QMessageBox.No:
+            #pass
 
     def go_to_line(self):
         w = QDialog(self)
@@ -237,6 +284,61 @@ class Electra(QMainWindow):
         if os.path.isfile(self.open_file):
             self.is_change_file = True
             self.setWindowTitle("*" + self.open_file)
+
+    
+    def select_programming_lang(self):
+        a = Lang()
+
+    def set_tab_width(self):
+        w = QDialog(self)
+
+        space_data = QLineEdit()
+        lab = QLabel("Tab Width")
+        save_button = QPushButton("Save")
+        cancel_button = QPushButton("Cancel")
+
+        save_button.clicked.connect(partial(self.text_area._set_tab_width, space_data, w))
+        cancel_button.clicked.connect(w.destroy)
+
+        main_lay = QVBoxLayout()
+
+        k1 = QHBoxLayout()
+        k1.addStretch(1)
+        k1.addWidget(lab)
+        k1.addWidget(space_data)
+
+        k2 = QHBoxLayout()
+        k2.addStretch(1)
+        k2.addWidget(save_button)
+        k2.addWidget(cancel_button)
+
+        main_lay.addStretch(1)
+        main_lay.addLayout(k1)
+        main_lay.addLayout(k2)
+
+        w.setLayout(main_lay)
+
+        w.exec_()
+        
+
+    def set_theme(self):
+        a = Themes(area=self.text_area, parent=None)
+        
+    def set_colorize(self):
+        a = Colorize(highlight=self.highlighter, parent=None)
+
+    def lang_running(self, lang, file_):
+        if lang == "python2":
+            Popen(["python2", file_])
+
+        elif lang == "python3":
+            Popen(["python3", file_])
+
+        elif lang == "java":
+            Popen(["java", file_])  #bakilacak
+
+        elif lang == "c":
+            Popen(["gcc", file_])
 
 
 if __name__ == "__main__":

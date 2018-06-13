@@ -1,9 +1,10 @@
 # from PyQt5.QtWidgets import QPlainTextEdit
 
 from PyQt5 import *
-from PyQt5.QtCore import Qt, QRect, QSize
-from PyQt5.QtWidgets import QWidget, QPlainTextEdit, QTextEdit
-from PyQt5.QtGui import QColor, QPainter, QTextFormat
+from PyQt5.QtCore import * #Qt, QRect, QSize
+from PyQt5.QtWidgets import * #QWidget, QPlainTextEdit, QTextEdit
+from PyQt5.QtGui import * #QColor, QPainter, QTextFormat
+
 
 
 class QLineNumberArea(QWidget):
@@ -19,14 +20,21 @@ class QLineNumberArea(QWidget):
 
 
 class My_Text_Area(QPlainTextEdit):
+
     def __init__(self, parent=None):
         super(My_Text_Area, self).__init__(parent)
         self.is_first_input = True
+       
         self.lineNumberArea = QLineNumberArea(self)
         self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
         self.updateRequest.connect(self.updateLineNumberArea)
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
         self.updateLineNumberAreaWidth(10)
+        self.setTabStopWidth(8*4)
+
+    def _set_tab_width(self, value, widget):
+        self.setTabStopWidth(8*int(value.text()))
+        widget.destroy()
 
     def mousePressEvent(self, event):
         if self.is_first_input:
@@ -58,7 +66,7 @@ class My_Text_Area(QPlainTextEdit):
             cursor.setPosition(self.startPosition)
             cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor)
             self.setTextCursor(cursor)
-
+    
     def _go_to_line(self, row, column, dialog):
         row, column = int(row.text()) - 1, int(column.text()) - 1
         cursor = self.textCursor()
@@ -127,3 +135,5 @@ class My_Text_Area(QPlainTextEdit):
             top = bottom
             bottom = top + self.blockBoundingRect(block).height()
             blockNumber += 1
+
+

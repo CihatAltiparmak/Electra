@@ -2,7 +2,8 @@ import json
 
 
 class Syntax_Patcher:
-    def c_parcher(self):  #for c programming lang
+    @staticmethod
+    def c_parcher():  #for c programming lang
         with open("./syntax_definitions/c_keywords.json") as f:
             data_c = f.read()
             return json.loads(data_c)
