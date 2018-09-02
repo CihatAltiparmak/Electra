@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>864</width>
+    <height>659</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>861</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>IBeamCursor</cursorShape>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(34, 15, 15, 209);
+selection-background-color: rgba(70, 105, 147, 204);
+color: rgba(225, 195, 36, 209);
+font: 9pt &quot;Monospace&quot;;</string>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="tabStopWidth">
+     <number>40</number>
+    </property>
+    <property name="centerOnScroll">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>470</y>
+      <width>861</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 131);
+selection-background-color: rgba(244, 206, 100, 230);
+font: 12pt &quot;Monospace&quot;;</string>
+    </property>
+    <property name="tabStopWidth">
+     <number>40</number>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>864</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionSelect_all"/>
+   </widget>
+   <widget class="QMenu" name="menuRun">
+    <property name="title">
+     <string>run</string>
+    </property>
+    <addaction name="actionJust_compile_but_don_t_run"/>
+    <addaction name="actionCompile_and_run"/>
+    <addaction name="actionJust_run"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>about</string>
+    </property>
+    <addaction name="actionAuthor"/>
+    <addaction name="actionVersion"/>
+    <addaction name="actionLicense"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuRun"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>open</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>new</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>save</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>save as</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionSelect_all">
+   <property name="text">
+    <string>select all</string>
+   </property>
+  </action>
+  <action name="actionJust_compile_but_don_t_run">
+   <property name="text">
+    <string>just compile but don't run</string>
+   </property>
+  </action>
+  <action name="actionCompile_and_run">
+   <property name="text">
+    <string>compile and run</string>
+   </property>
+  </action>
+  <action name="actionJust_run">
+   <property name="text">
+    <string>just run</string>
+   </property>
+  </action>
+  <action name="actionAuthor">
+   <property name="text">
+    <string>author</string>
+   </property>
+  </action>
+  <action name="actionVersion">
+   <property name="text">
+    <string>version</string>
+   </property>
+  </action>
+  <action name="actionLicense">
+   <property name="text">
+    <string>license</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
